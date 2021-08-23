@@ -1,5 +1,5 @@
 import numpy as np
-import datetime
+from datetime import datetime
 from statsmodels.tsa.stattools import adfuller
 	
 def calculate_metrics(metrics, values):
@@ -34,24 +34,42 @@ def calculate_metrics(metrics, values):
 			res[metric] = min(values)	
 	return res
 
-
-#fitting functions
-
 def calculate_tests(tests, x, y):
 	res = {}
 
 	for test in tests:
 		if test == 'periodicity':
-			res[test] = find_period(x, y)
+			res[test] = autocorrelate(x, y)
 
 		if test == 'stationarity':
 			res[test] = is_stationary(y)
 
 	return res
 
-def find_period(x, y):
-	return 1
+def get_sample_frequency(x, y):
+	start = datetime.timestamp(min(x))
+	end = datetime.timestamp(max(x))
 
+	fs = len(y) / (end - start)
+
+	return fs
+
+
+def autocorrelate(time, vals):
+	n = len(vals)
+	fs = get_sample_frequency(time, vals)
+	mean = sum(vals)/n
+	norm = [v - mean for v in vals]
+	res = np.correlate(norm, norm, mode='same')
+	acorr = res[n//2 + 1:] / (calculate_metrics(['variance'], norm)['variance'] * np.arange(n-1, n//2, -1))
+
+	lag = np.abs(acorr).argmax() + 1
+	r = acorr[lag - 1]
+
+	if np.abs(r) > 0.5:
+		return (lag / fs)
+	
+	return 0
 
 def is_stationary(y, margin=0.05):
 	adftest = adfuller(y, autolag='AIC')

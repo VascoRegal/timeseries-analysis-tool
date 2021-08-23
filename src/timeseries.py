@@ -1,7 +1,7 @@
 import numpy as np
 
 from database import fetch_records
-from utils import calculate_metrics, calculate_tests
+from utils import calculate_metrics, calculate_tests, autocorrelate
 from plotting import *
 
 COMMON_WINDOW_NAME = "TIME SERIES"
