@@ -79,3 +79,37 @@ def is_stationary(y, margin=0.05):
 		return True
 	else:
 		return False
+
+
+
+TIME_CONVERSION_TABLE = {'second': 1,
+				   'minute': 60,
+                   'hour': 3600,
+                   'day': 86400,
+                   'week': 604800,
+                   'month': 2629743.83,
+                   'year': 31556926}
+
+def calculate_bucket(lst):
+	if type(lst) == dict:
+		return np.arange(lst['from'], lst['to'], lst['interval'])
+	else:
+		res = []
+		for l in lst:
+			for i in l:
+				res.append(i)
+		return np.array(list(dict.fromkeys(res)))
+
+def find_hist_range(indicators, dic, unit='second'):
+	res = {}
+	def_vals = dic['default']
+	IntIndicators = [k for k in dic.keys() if k != 'default']
+
+	for i in indicators:
+		if i in IntIndicators:
+			bins = dic[i]
+		else:
+			bins = def_vals
+		res[i] = calculate_bucket(bins) * TIME_CONVERSION_TABLE[unit]
+	return res
+
