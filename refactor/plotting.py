@@ -1,5 +1,7 @@
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+matplotlib.use('GTK3Agg')
 
 from utils import TIME_CONVERSION_TABLE
 
