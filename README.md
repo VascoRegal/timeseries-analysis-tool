@@ -55,5 +55,6 @@ $ scp user@remomte_machine:path/to/installation/plots/*.png path/to/local_machin
 * Do a proper interpretation of the autocorrelation method to find the series' possible period. (see Note on the fucntion ```autocorrelate```)
 * Implement XML parsing.
 * Save plots with better names, not just number.png
+* Exception handling.
 
 
