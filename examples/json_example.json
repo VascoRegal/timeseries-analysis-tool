@@ -1,0 +1,86 @@
+{
+  "global": {
+    "timeInterval": {
+      "begin": "2020-01-01 00:00:00",
+      "end": "2020-01-12 00:00:00"
+    },
+    "plot": true,
+    "connectString": "user=postgres password=psw host=127.0.0.1 port=5000 dbname=nome sslmode=disable"
+  },
+  "timeseries": {
+    "btc": {
+      "query": "select val1, val2, design, ts from teste where ts >= '2020-01-01 00:00:00' and ts < '2020-01-12 00:00:00' order by design, ts;",
+      "context": [
+        "design"
+      ],
+      "indicators": [
+        "val1",
+        "val2"
+      ],
+      "timestamp": "ts",
+      "plot": true,
+      "separatePlots": false,
+      "valuesIntervals": {
+        "default": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "val1": {
+          "from": 65.0,
+          "to": 100.0,
+          "interval": 10.0
+        }
+      },
+      "timeIntervalsUnit": "day",
+      "timeIntervalsNullhandling": "absent",
+      "timeIntervals": {
+        "default": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "energy_reactive": {
+          "from": 0,
+          "to": 4,
+          "interval": 1
+        }
+      },
+      "metrics": [
+        "mean",
+        "variance",
+        "median",
+        "max",
+        "min"
+      ],
+      "test": [
+        "stationarity",
+        "periodicity"
+      ],
+      "causality": [
+        [
+          "val1",
+          "val2"
+        ]
+      ]
+    }
+  }
+}
