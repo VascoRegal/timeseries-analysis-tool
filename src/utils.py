@@ -2,8 +2,11 @@ import numpy as np
 from datetime import datetime
 from statsmodels.tsa.stattools import adfuller
 from scipy.stats import pearsonr
-	
 
+'''	
+Tabela para conversão de valores.
+O campo timeIntervalsUnit é uma key desta varável.
+'''
 TIME_CONVERSION_TABLE = {'second': 1,
 				   'minute': 60,
                    'hour': 3600,
@@ -12,7 +15,20 @@ TIME_CONVERSION_TABLE = {'second': 1,
                    'month': 2629743.83,
                    'year': 31556926}
 
+
+
 def calculate_metrics(metrics, values):
+	'''
+	Calcula as métricas desejadas.
+
+	Params:
+		(list) metrics	->	strings com os nomes das métricas a calcular
+		(list) values	->	dataset a analisar
+
+	Return:
+		(dict) res		->  dicionario com os resultados, {métrica: resultado} 
+
+	'''
 	res = {}
 	n = len(values)
 	
@@ -39,22 +55,46 @@ def calculate_metrics(metrics, values):
 			res[metric] = max(values)
 		
 		elif metric == 'min':
-			res[metric] = min(values)	
+			res[metric] = min(values)
+
+		elif metric == 'outra_metrica_a_ser_adicionada':
+			pass
+
 	return res
 
 def calculate_tests(tests, x, y):
+	'''
+	Calcula os testes desejados.
+
+	Params:
+		(list) tests	->	strings com os nomes dos testes a calcular
+		(list) x		->	eixo x do dataset
+		(list) y		-> 	eixo y
+
+	Return:
+		(dict) res		->  dicionario com os resultados, {teste: resultado} 
+
+	'''
+
 	res = {}
 
 	for test in tests:
 		if test == 'periodicity':
 			res[test] = autocorrelate(x, y) 
 
-		if test == 'stationarity':
+		elif test == 'stationarity':
 			res[test] = is_stationary(y)
+
+		elif test == 'outro_teste_qualquer':
+			pass
 
 	return res
 
+
 def get_sample_frequency(x, y):
+	'''
+	Calcula a frequencia de amostragem
+	'''
 	start = datetime.timestamp(min(x))
 	end = datetime.timestamp(max(x))
 
@@ -64,6 +104,19 @@ def get_sample_frequency(x, y):
 
 
 def autocorrelate(time, vals):
+	'''
+	Implementação do algoritmos de autocorrelação para descobrir o período
+
+	Nota: Embora tenha aplicado o algoritmo bem, acho que estou a interpretar mal a converter
+		  os resultados para segundos (o output do algoritmo dá um valor de r e um de lag apenas)
+
+	Params:
+		(list) time	-> valores do tempo
+		(list) vals	-> dataset
+
+	Return:
+		(int/float) -> período em segundos
+	'''
 	n = len(vals)
 	fs = get_sample_frequency(time, vals)
 	mean = sum(vals)/n
@@ -80,6 +133,17 @@ def autocorrelate(time, vals):
 	return 0
 
 def is_stationary(y, margin=0.05):
+	'''
+	Implementação de Augmented Dickey-Fuller test
+
+	Param:
+		(list) 	y		->	dataset
+		(float)	margin	->	margem do algoritmo do adfuller
+
+	Return:
+		(bool)	->	se é stationary ou não
+	'''
+
 	adftest = adfuller(y, autolag='AIC')
 	p = adftest[1]
 
@@ -89,6 +153,20 @@ def is_stationary(y, margin=0.05):
 		return False
 
 def test_causality(y1, y2):
+	'''
+	Implementação do algorimto de Pearson. Dados 2 datasets, retorna um valor entre -1 e 1.
+	Próximo de 0 significa que não há coorelação entre valores.
+	Próximo de -1 significa uma proporcionalidade inversa.
+	Próximo de 1 significa uma proporcionalidade direta. 
+
+	Param:
+		(list)	y1	->	dataset 1
+		(list)	y2	->	dataset 2
+
+	Return:
+		(float)	corr	->	indice da correlação (entre -1 e 1)
+	'''
+
 	if len(y1) > len(y2):
 		y1 = y1[:len(y2)]
 	else:
@@ -99,6 +177,16 @@ def test_causality(y1, y2):
 	return corr
 
 def calculate_bucket(lst):
+	'''
+	Função usada para transformar num numpy array os intervalos de valores passados no config,
+	sejam eles no formato "from: to:" ou escrito em extenso
+
+	Param:
+		(list)	lst	->	intervalo inputted
+
+	Return:
+		(numpy array)	->	numpy array com os intervalos formatados		
+	'''
 	if type(lst) == dict:
 		return np.arange(lst['from'], lst['to'], lst['interval'])
 	else:

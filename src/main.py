@@ -33,6 +33,35 @@ def main():
         if 'plot' in conf.keys():
             plot = conf['plot']
 
+
+        '''
+        processa o dicionário retornado pela query numa estrutura do tipo:
+
+        'key': {
+            'context': {
+                ctx_field1: ctx_val1,
+                ctx_field2: ctx_val2,
+                ...
+            },
+
+            'vals': {
+                indicator1 : {
+                    timestamp1: indicator1_val1,
+                    timestamp2: indicator1_val2,
+                    ...
+                },
+
+                indicator2 : {
+                    timestamp1: indicator2_val1,
+                    ...
+                }
+            }
+
+        }
+
+        em que key é a string de concatenação dos contextos
+
+        '''
         for r in records:
             ctx_dict = {}
             key=[]
@@ -58,6 +87,13 @@ def main():
                     else:
                         data[keystr]['vals'][i][stamp] = r[i]
 
+        
+
+        '''
+
+        itera a estrutura criada anteriormente e analisa os datasets de cada entrada
+
+        '''
         for context, info in data.items():
 
             print(f"\t|_ CONTEXT")
@@ -70,6 +106,8 @@ def main():
                 print("\t\t|_ INDICATOR")
                 print(f"\t\t\t{i}")
 
+
+                #plotting 
                 if plot:
                     opts = {"label":f"{context} - {i}",
                             "marker": "o"}
@@ -84,6 +122,8 @@ def main():
                             window, **opts)
 
 
+
+                #histograma de intervalo de valores
                 if i in conf['valuesIntervals'].keys():
                     bins = conf['valuesIntervals'][i]
                 else:
@@ -95,6 +135,8 @@ def main():
                         f'[context:{context}] {i} Values Interval',
                         f'VALUES INTERVAL - {i} [{g}]',**opts)
 
+
+                #histograma de intervalo de tempo
                 if i in conf['timeIntervals'].keys():
                     bins = conf['timeIntervals'][i]
                 else:
@@ -116,16 +158,20 @@ def main():
                         f'[context:{context}] {i} Time Interval', f'TIME INTERVAL - {i} [{g}]',
                         **opts)
 
+                #calculo das metricas
                 print("\t\t|_ METRICS")
                 for metric, val in calculate_metrics(conf['metrics'], list(v.values())).items():
                     print(f"\t\t\t{metric:12} : {val}")
 
+                #calculo dos testes
                 print("\t\t|_ TESTS")
                 for test, val in calculate_tests(conf['test'], list(v.keys()), list(v.values())).items():
                     print(f"\t\t\t{test:12} : {val}")
 
                 print("\n")
 
+
+            #causalidade
             print("\t|_ CAUSALITY (PEARSON CORRELATION)")
             for lst in conf['causality']:
                 args=[]
@@ -138,6 +184,7 @@ def main():
         print("*"*60)
         print("\n")
         show_plots()
+
 
 if __name__ == '__main__':
     main()

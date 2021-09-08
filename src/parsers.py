@@ -2,8 +2,12 @@ import json
 import yaml
 
 class FileParser:
+	'''
+	Classe para processar os ficheiros de config. Tenta fazer o parse entre todos os parsers possiveis
+	até que um retorne alguma coisa. Se nenhum retornar, o ficheiro está mal formatado.
+	'''
 	def __init__(self):
-		self.parsers = [JSONParser(), YAMLParser()]
+		self.parsers = [JSONParser(), YAMLParser()]		#adicionar outros parsers
 
 	def parse(self,path):
 		for p in self.parsers:
@@ -39,6 +43,14 @@ class YAMLParser(FileParser):
 			data = None
 		fp.close()
 		return data
+
+'''
+class OutroParser(FileParser):
+
+	Função parse tem que retornar um dicionário.
+	def parse(self,path):
+		...
+'''
 
 
 
