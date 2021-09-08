@@ -31,7 +31,6 @@ $ git clone git@github.com:VascoRegal/timeseries-analysis-tool.git
 3. **```cd``` into the repo**.
 
 4. **Install the requirments**:
-If you are using 
 ```
 $ pip install -r requirments.txt
 ```
