@@ -25,7 +25,7 @@ $ source ./bin/activate
 2. **Clone this repo**:
 
 ``` 
-$ git clone git@github.com:VascoRegal/timeseries-analysis-tool.git 
+$ git clone https://github.com/VascoRegal/timeseries-analysis-tool.git
 ```
 
 3. **```cd``` into the repo**.
