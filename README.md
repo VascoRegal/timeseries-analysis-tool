@@ -25,13 +25,12 @@ $ source ./bin/activate
 2. **Clone this repo**:
 
 ``` 
-$ git clone git@github.com:VascoRegal/timeseries-analysis-tool.git 
+$ git clone https://github.com/VascoRegal/timeseries-analysis-tool.git
 ```
 
 3. **```cd``` into the repo**.
 
 4. **Install the requirments**:
-If you are using 
 ```
 $ pip install -r requirments.txt
 ```
@@ -55,6 +54,7 @@ $ scp user@remomte_machine:path/to/installation/plots/*.png path/to/local_machin
 * Test the script for multiple contexts.
 * Do a proper interpretation of the autocorrelation method to find the series' possible period. (see Note on the fucntion ```autocorrelate```)
 * Implement XML parsing.
-* Save plots with better names, not just number.png
+* Find a better way to show plots through ssh.
+* Exception handling.
 
 
