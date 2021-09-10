@@ -54,7 +54,7 @@ $ scp user@remomte_machine:path/to/installation/plots/*.png path/to/local_machin
 * Test the script for multiple contexts.
 * Do a proper interpretation of the autocorrelation method to find the series' possible period. (see Note on the fucntion ```autocorrelate```)
 * Implement XML parsing.
-* Save plots with better names, not just number.png
+* Find a better way to show plots through ssh.
 * Exception handling.
 
 
